@@ -64,8 +64,129 @@ Web means the internet and service is another term for an API. Therefore, a ***W
 
 Most popular public APIs such as Github's, Ebay's, etc are web services. All Web services are APIs. However, not all APIs are Web services. At times, an application may be interacting with another application internally, without hitting the network (locally). Such interactions are most definitely not Web services
 
+In Web services, the program is on a server i.e a computer not on the client.
+
 ### Points to note
 
 1. A Web service needs a **format** to transfer data over the N/W (ex: XML, JSON)
-2. It also needs a **protocol** to communicate the information over the network (ex: REST, SOAP, XML/RPC)
+2. It also needs a **protocol** (ex: REST, SOAP, XML/RPC)
 
+## HTTP
+
+ A Web service is an API and since it runs over the internet, it uses **HTTP** for the request/response communication
+
+HTTP stands for **HyperText Transfer Protocol**. HyperTest means text that can take you somewhere which regular text cannot. That is, when you hit www.google.om or click an anchor tag, the HTTP protocol automatically hits that URL with a request and comes back with a response (which is why all URLs starting with `www` are auto-prefixed with `http` or `https`). This is the mechanism that is used to transfer data
+
+### HTTP request & response
+
+The content structure of the HTTP request or response is as follows:
+
+1. Start line (Tells program to start) **Mandatory**
+2. Headers
+3. Blank line
+4. Body
+
+Only the start line is mandatory.
+
+#### Start line (Also called Request line or Status line)
+
+The ***HTTP version*** is contained in both the request and response start lines (Ex: `HTTP/1.1` or `HTTP/2`)
+
+In the request, it also contains the ***method*** (Ex: GET , POST, PUT, DELETE. etc). We even have the request path (folder) and the params (query string). For example, `/search?q=beard`
+
+In the response, it contains the ***status code*** which indicates if the request was a success or not (Ex: `200` for OK, `400` for client error, and `500` for server error)
+
+##### Request line format:
+
+`<method> [<path+queryparams>] <httpversion>`
+
+Examples: `GET /search?q=beard HTTP/1.1`, `POST HTTP/1.1`, etc
+
+##### Status line format:
+
+`<httpversion> <statuscode>`
+
+Example: `HTTP/1.1 200 OK`
+
+#### Headers 
+
+Each line in the headers section is one individual header (key & value)
+
+The common request headers are **host** (domain) such as `www.google.com` and **token** (if request requires authentication) and so on
+
+The common response headers are **cookie** (holds all the cookies)m **content-type** (is it an HTML page or a JSON, etc?)
+
+On both sides, we can have custom headers (usually prefixed with an `x-`). For example, your CDN provider might allows some custom headers to pass through and they carry a special meaning to your application
+
+You can have **as many lines (Headers)** as you want in the headers section.
+
+#### Blank line
+
+This exists just to differentiate header section from the body section
+
+#### Body
+
+The body can be empty or contain information (i.e contains the ***content***)
+
+In the request, if it is a GET method then the body is empty. For other methods where it needs to send (Ex: POST) the server some information (ex: username & password), it will contain such data in the body
+
+In the response, the data can be an HTML page or a JSON response or XML, depending on what was requested and how the server handled the request
+
+##### Body structure
+
+The structure of the body depends on the **content-type** header. The content type is present on both the request and response HTTP packets in order to inform the server and client, respectively, on how to read the data. 
+
+There are two parts to the `content-type` header: `<type>/<subtype>` (For example, `application/json`, `image/png`, or `text/css`, etc)
+
+#####  Content-types used for sending or receiving data
+
+The `application/json` & `application/xml` are two common data formats for sharing data in an API
+
+#### Demo:
+
+![HTTP packet example image](https://www.ntu.edu.sg/home/ehchua/programming/webprogramming/images/HTTP_ResponseMessageExample.png)
+
+**Note:**
+
+- There are 4 main methods used (They can be thought of as **CRUD** operations):
+	- `GET`: To query data
+	- `POST`: To create data
+	- `PUT`: To change data
+	- `DELETE`: To delete (remove) data
+- **Idempotence of methods**: Does repeating it cause result to stay the same? Is it safe to repeat? Only ***POST*** is not idempotent!
+	- GET: Yes (Querying the same data again and again is fine)
+	- POST: ***No*** (Adding more value does affects resulting data)
+	- PUT: Yes (Applying the same change over and over again is fine)
+	- DELETE: Yes (Once you delete and repeat deletion, nothing is left to delete)
+- Standard HTTP status codes:
+	- `2xx`: Success codes
+	- `3xx`: Redirections
+	- `4xx`: Client errors
+	- `5xx`: Server errors
+
+#### Standard headers (Non-exhaustive)
+
+##### Common
+
+- `Date`: of the header generation
+- `Cache-Control`: Contains caching directives in both request and response
+- `Connection`: Specifies if connection should stay open i.e `keep-alive` after current transaction finishes
+
+##### Request
+
+- `Accept-Language`: The language the client accepts ex. `en-US` for US English
+- `Cookie`: The cookies shared with server
+- `User-Agent`: The user agent string
+- `Referer`: Address of previous web page from which to current page was requested
+
+##### Response
+
+- `Age`: Time in seconds the object has been in a proxy cache (`0` means just fetched from the server)
+- `Location`: The URL to redirect a page to (Usually in a `3XX` or `201` status response)
+- `Server`: Describes the software used by origin server that handled request (Ex: nginx or apache information)
+
+#### Entity (Common)
+
+- `Content-Type`: Media type of request or response body (content)
+- `Content-length`: Size of the body in bytes
+- `Content-Encoding`: Used to compress data as per the content-type
