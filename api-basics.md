@@ -357,9 +357,9 @@ In this example the `<portType>` element defines "glossaryTerms" as the name of 
 
 #### The HTTP request/response rules in SOAP:
 
-1. Start line: `POST WSDL <HTTPVersion>`
+1. Start line: `POST <WSDL> <HTTPVersion>`
 	- There are no method names in SOAP so it just uses `POST` as a placeholder for it (even though it does not create content on the API server). Hence, **every SOAP request uses POST**
-	- `WSDL` is used in place of the location & query params
+	- The WSDL location is used in place of the path & query params
 2. Headers: The `content-type` must be set to **`text/xml`**
 3. Body: Contains XML data (i.e an XML envelope formed using WSDL)
 
