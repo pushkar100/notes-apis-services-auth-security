@@ -190,3 +190,109 @@ The `application/json` & `application/xml` are two common data formats for shari
 - `Content-Type`: Media type of request or response body (content)
 - `Content-length`: Size of the body in bytes
 - `Content-Encoding`: Used to compress data as per the content-type
+
+## Data representation formats
+
+### XML
+
+XML stands for **eXtensible Markup Language**. It was created in 1997 by the **W3C**, which has created other standards for the web as well, such as HTML, SOAP, XPath, XMLSchema, and so on
+
+It is a data representation format (used in APIs)
+
+It is constructed similar to HTML with tags (Ex: `<pizza>...</pizza>`) but unlike HTML the tags describe the data point rather than a DOM object. Also, HTML is not extensible while XML is. This means that XML tags can be customized whereas in HTML we have to use pre-defined tags (that the browsers understand)
+
+The **`content-type`** header when you send XML data in request and response is set to **`application/xml`**. In this case, the HTTP **body** will contain data in XML format.
+
+An XML file example (Note: The first line is for documentation or information only):
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<note>
+  <to>Tove</to>
+  <from>Jani</from>
+  <heading>Reminder</heading>
+  <body>Don't forget me this weekend!</body>
+</note>
+```
+
+#### Related XML standards
+
+W3C has come up with other XML-related standards:
+
+1. **XPath**: It is a query to uniquely identify an XML element (can be used with HTML too)
+2. **XSLT**: A standard to convert XML from one XML format to another XML format
+3. **XMLSchema**: It is a schema language for specifying the type of data that an XML document must adhere to. It uses something known as an **XSD** to define the schema (Earlier, they'd use DTD)
+
+There are other standards too!
+
+Example of an XML Schema that uses XSD:
+```xml
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="note">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="to" type="xs:string"/>
+      <xs:element name="from" type="xs:string"/>
+      <xs:element name="heading" type="xs:string"/>
+      <xs:element name="body" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+</xs:schema>
+```
+
+### JSON
+
+JSON stands for **JavaScript Object Notation**. It was created in 2001 by a proponent of JS, ***Douglas Crockford***
+
+The data is represented similar to an object in the javascript language. Instead of tags like in XML, the JSON contains `key: value` pairs where the keys are specified within double quotes (`"`) and the values can be the common values like in a JS object (strings, numbers, arrays, and so on). We cannot, however, have more complex JS values such as functions, sets, etc
+
+The **`content-type`** header for an HTTP body that contains JSON in a request or response is **`application/json`**
+
+JSON is simple and the information is available in an easy to read format [here](https://www.json.org/json-en.html)
+
+Example JSON:
+```json
+{
+    "glossary": {
+        "title": "example glossary",
+		"GlossDiv": {
+            "title": "S",
+			"GlossList": {
+                "GlossEntry": {
+                    "ID": "SGML",
+					"SortAs": "SGML",
+					"GlossTerm": "Standard Generalized Markup Language",
+					"Acronym": "SGML",
+					"Abbrev": "ISO 8879:1986",
+					"GlossDef": {
+                        "para": "A meta-markup language, used to create markup languages such as DocBook.",
+						"GlossSeeAlso": ["GML", "XML"]
+                    },
+					"GlossSee": "markup"
+                }
+            }
+        }
+    }
+}
+```
+
+#### JSON vs XML: Which is better?
+
+XML has been falling out of favour and is almost never picked over JSON nowadays. There are a few reasons for this:
+
+**JSON is lightweight and more popular:**
+
+1. JSON notation is simpler. It is less verbose and there are no tags. Terser
+2. Because JSON is terser, it makes sense to use it over the network. The XML payload for the same data is likely to consume more bytes than JSON and hence, will increase the time required to transport it over the network
+
+**XML is more powerful:**
+
+1. We can convert XML from one format to another using XSLT
+2. We can provide security with XML Schema (Do not respect incoming data if schema is not followed). Such checks are not so prevalent with JSONs
+
+#### JSON Schema
+
+JSON too has a schema to represent the object structures and value types but it is not very commonly used. It is more popular to use plain JSON without a schema
