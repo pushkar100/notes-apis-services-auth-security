@@ -256,26 +256,26 @@ JSON is simple and the information is available in an easy to read format [here]
 Example JSON:
 ```json
 {
-    "glossary": {
-        "title": "example glossary",
-		"GlossDiv": {
-            "title": "S",
-			"GlossList": {
-                "GlossEntry": {
-                    "ID": "SGML",
-					"SortAs": "SGML",
-					"GlossTerm": "Standard Generalized Markup Language",
-					"Acronym": "SGML",
-					"Abbrev": "ISO 8879:1986",
-					"GlossDef": {
-                        "para": "A meta-markup language, used to create markup languages such as DocBook.",
-						"GlossSeeAlso": ["GML", "XML"]
-                    },
-					"GlossSee": "markup"
-                }
-            }
+  "glossary": {
+    "title": "example glossary",
+    "GlossDiv": {
+      "title": "S",
+      "GlossList": {
+        "GlossEntry": {
+          "ID": "SGML",
+          "SortAs": "SGML",
+          "GlossTerm": "Standard Generalized Markup Language",
+          "Acronym": "SGML",
+          "Abbrev": "ISO 8879:1986",
+          "GlossDef": {
+            "para": "A meta-markup language, used to create markup languages such as DocBook.",
+            "GlossSeeAlso": ["GML", "XML"]
+          },
+          "GlossSee": "markup"
         }
+      }
     }
+  }
 }
 ```
 
@@ -296,3 +296,122 @@ XML has been falling out of favour and is almost never picked over JSON nowadays
 #### JSON Schema
 
 JSON too has a schema to represent the object structures and value types but it is not very commonly used. It is more popular to use plain JSON without a schema
+
+## Protocols for Web services
+
+For APIs that work over the internet (Web services), we have protocols that define the API working. Two of the most popular Web service protocols are:
+
+1. SOAP
+2. REST
+
+Since Web services work over HTTP, *SOAP and REST are just **rules to form HTTP requests and responses***
+
+### REST vs SOAP
+
+REST is more popular and also growing in popularity as compared to SOAP. You may never use SOAP if you start dealing with APIs now
+
+### SOAP
+
+SOAP stands for **Simple Object Access Notation**. Object access refers to accessing an API. Therefore, SOAP is a notation by which we access an API (i.e rules)
+
+SOAP uses a language called **WSDL** (Web Services Description Language) for its purposes
+
+#### WSDL structure & example
+
+```xml
+<definitions>
+<types>
+  data type definitions........
+</types>
+<message>
+  definition of the data being communicated....
+</message>
+<portType>
+  set of operations......
+</portType>
+<binding>
+  protocol and data format specification....
+</binding>
+</definitions>
+```
+
+Example:
+```xml
+<message name="getTermRequest">
+  <part name="term" type="xs:string"/>
+</message>
+
+<message name="getTermResponse">
+  <part name="value" type="xs:string"/>
+</message>
+
+<portType name="glossaryTerms">
+  <operation name="getTerm">
+    <input message="getTermRequest"/>
+    <output message="getTermResponse"/>
+  </operation>
+</portType>
+```
+
+In this example the `<portType>` element defines "glossaryTerms" as the name of a port, and "getTerm" as the name of an operation. The "getTerm" operation has an input message called "getTermRequest" and an output message called "getTermResponse". The `<message>` elements define the parts of each message and the associated data types
+
+#### The HTTP request/response rules in SOAP:
+
+1. Start line: `POST WSDL <HTTPVersion>`
+	- There are no method names in SOAP so it just uses `POST` as a placeholder for it (even though it does not create content on the API server). Hence, **every SOAP request uses POST**
+	- `WSDL` is used in place of the location & query params
+2. Headers: The `content-type` must be set to **`text/xml`**
+3. Body: Contains XML data (i.e an XML envelope formed using WSDL)
+
+The SOAP rules were defined by the **W3C** (Same organization that created XML, HTML, & WSDL)
+
+An example SOAP HTTP Body (XML envelope created using the WSDL):
+```xml
+<?xml version="1.0"?>
+
+<soap:Envelope
+xmlns:soap="http://www.w3.org/2003/05/soap-envelope/"
+soap:encodingStyle="http://www.w3.org/2003/05/soap-encoding">
+
+<soap:Header>
+...
+</soap:Header>
+
+<soap:Body>
+...
+  <soap:Fault>
+  ...
+  </soap:Fault>
+</soap:Body>
+
+</soap:Envelope>
+```
+
+**Note:** 
+
+1. `ns` in `xmlns` refers to a namespace. We pass the URL of the WSDL as value to a namespace
+2. `<soap:Envelope>` attributes basically registers the WSDL which acts as the envelope that is used to define the XML body
+
+Example SOAP HTTP request image:
+
+![SOAP HTTP request example image](http://www.bizcoder.com/Media/Bizcoder/Windows-Live-Writer/REST-Paint-On-A-SOAP-Stack_A717/image_thumb_1.png)
+
+An example SOAP HTTP request:
+```
+POST /webservicesserver/NumberConversion.wso HTTP/1.1
+Host: www.dataaccess.com
+Content-Type: text/xml
+cache-control: no-cache
+Postman-Token: 48c93c51-62e3-42e8-ba66-6e299d5b7b89
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <NumberToWords xmlns="http://www.dataaccess.com/webservicesserver/">
+      <ubiNum>500</ubiNum>
+    </NumberToWords>
+  </soap:Body>
+</soap:Envelope>
+```
+
+### REST
+
