@@ -716,3 +716,16 @@ HMACSHA256(
   <your 256 bit secret>
 )
 ```
+
+## Postman Introduction
+
+Postman is a tool that helps you make API requests mainly for the purposes of testing, prototyping, designing APIs, and so on
+
+Developed by an Indian developer and later built a company around it
+
+What is Postman? It is a ***browser***
+
+Difference between Postman & other browsers:
+
+1. You can make direct API calls without needing a (GUI) interface
+2. We can look underneath the hood when making API calls (i.e see details)
