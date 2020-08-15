@@ -2,6 +2,21 @@
 
  [Course link](https://www.udemy.com/course/api-and-web-service-introduction)
 
+**Contents**
+
+1. [What is an API?](# What is an API?)
+2. [API details](# API details)
+3. [What is a Web service?](# What is a Web service?)
+4. [HTTP](# HTTP)
+5. [Data representation formats](# Data representation formats)
+6. [Protocols for Web services](# Protocols for Web services)
+7. [Types of apps](# Types of apps)
+8. [Security, authentication, & authorization](# Security, authentication, & authorization)
+9. [Types of authentication & Postman Introduction](# Types of authentication & Postman Introduction)
+10. [AWS](# AWS)
+11. [Webhooks](# Webhooks)
+12. [Microservices](# Microservices)
+
 ## What is an API?
 
 API stands for "Application Programming Interface". What does it mean? 
@@ -44,7 +59,7 @@ It allows us to hit the program from anywhere, using any script (Python, curl, e
 
 ***Tell a program that you do not own, to run!***
 
-## API Details
+## API details
 
  Every API has at least 3 parts:
  
@@ -494,7 +509,7 @@ Hybrid apps have both native features. Web apps can be embedded inside the nativ
 - Cost: Web apps are the easiest to create
 - Accessibility: Web apps are very accessible (apps require download)
 
-## Security, Authentication & Authorization
+## Security, authentication & authorization
 
 ### HTTPS
 
@@ -538,15 +553,17 @@ Depending on the need, there is authorization or authentication or both!
 > - [Okta article](https://developer.okta.com/blog/2019/10/21/illustrated-guide-to-oauth-and-oidc)
 > - [OAuth2 Simplified](https://aaronparecki.com/oauth-2-simplified/#user-experience-and-alternative-authorization-flows)
 
-***OAuth2.0 is a way to give access (authorization) to a 3rd party entity (i.e application) to access your resources on another entity.*** 
+***OAuth2.0 is a way to give access (authorization) to a 3rd party entity (i.e application) to access your resources on another entity.*** It was started in 2006
 
 As an example, imagine you have a Google Photos account and want share access to a folder in it for a photo editing app (or to another friend). Your photo editing app then needs to send you to google photos which will make you login (if not done so already), take your consent to provide access to the other app, and redirect back to the photo editor app with a special token. This token is then used by the photo editor app to work on photos from the folder you've allowed it to access
 
-**Note**: ***OAuth1.0 is obsolete*** and no one uses it. You do not have to learn it and OAuth2.0 is not built on top of it either
+**Note**: 
+- ***OAuth1.0 is obsolete*** and no one uses it. However, it's not bad. In fact, it's good! But, it's too complicated. You do not have to learn it and OAuth2.0 is not built on top of it either
+- RFC stands for *Request For Comments* that was put out by **IETF** (Internet Engineering Task Force) for many standards
 
 #### Why OAuth2.0?
 
-Sharing your credentials on one app with another app and expecting privacy and security to be guaranteed is a big risk. The need is to provide authorization to resources and not the user credentials
+OAuth stands for ***Open Authentication***. It allows sharing of your credentials on one app with another app and expecting privacy and security to be guaranteed is a big risk. The need is to provide authorization to resources and not the user credentials
 
 Note that there is authentication as well as authorization in OAuth:
 
@@ -717,7 +734,7 @@ HMACSHA256(
 )
 ```
 
-## Postman Introduction
+## Types of authentication & Postman Introduction
 
 Postman is a tool that helps you make API requests mainly for the purposes of testing, prototyping, designing APIs, and so on
 
@@ -729,3 +746,71 @@ Difference between Postman & other browsers:
 
 1. You can make direct API calls without needing a (GUI) interface
 2. We can look underneath the hood when making API calls (i.e see details)
+
+*Note:* [https://www.programmableweb.com/](https://www.programmableweb.com/) provides a searchable list of public APIs under the "API DIRECTORY" link. We can search based on name, API type, Authentication type, and so on. This is a good resource to try out different APIs (via Postman) and analyse them
+
+To be able to try out different postman features, check out this [documentation](https://docs.postman-echo.com/?version=latest)
+
+### 1. Basic authentication
+
+It is a simple (basic) way of proving your identity (authentication). The method is uses is that of a *username* and a *password*. It has been in existence since 1999. It is **NOT VERY SECURE!**
+
+Anybody can see the username/password (or its base64 form and decode it) easily. So, it is better to pass it via ***HTTPS (encrypted)*** and not HTTP
+
+1. To make an API call with basic authentication, select the request's ***Authorization*** tab, click the dropdown and select *Basic Auth*. It will require us to fill in a *username* & *password*
+2. Postman creates a (hidden) header in the request called `Authorization` with a value like so: `Basic <Base64Key>`. Basic means basic authentication and the key is generated from the username and password (Ex: `Basic cG9zdG1hbjpwYXNzd29yZA==`)
+
+Try out a demo in postman: Make a GET request to `https://postman-echo.com/basic-auth` and select 'Basic Auth' and type `postman` / `password` in username / password field 
+
+(*Note:* if there is no authorization, you can select "No Auth" from the same dropdown)
+
+### 2. Digest authentication
+
+Instead of sending a username and a password as an encoded base64 string that can be easily decoded by anyone on an HTTP network which forces us to use HTTPS networks for basic authentication, we can use a slightly different approach
+
+A ***digest*** means something that helps us *convert a value into a consumable*. In the real world, your stomach acid is a digest since it converts food taken into the stomach into nutrients that enrich our bodies. In computers, a password for a zip file is a digest is something that helps us unzip and access the actual files
+
+A digest is different from a password in the following ways:
+
+1. A secret is shared between the client and server only
+2. When client makes a request, it generates a hash (MD5/SHA) of the data using the secret key which becomes the digest
+3. When server receives the data, it decodes the digest using the secret key 
+4. Even if someone else intercepts the network, they cannot decipher the digest without the secret key. Hence, digest can be used over an HTTP network
+
+Digest approach is not very popular, not even as popular as basic authentication!
+
+What is **Nonce**? When creating a digest, we need to use a unique number. The digest plus the unique number will help the server. If the same nonce is used again in the authentication request, the server will not act on it
+
+The `Authorization` header in the request will be of the form `Digest <value>` 
+
+For example:
+```
+Digest username="postman", realm="Users", nonce="ni1LiL0O37PRRhofWdCLmwFsnEtH1lew", uri="/digest-auth", response="254679099562cf07df9b6f5d8d15db44", opaque=""
+```
+
+Try `GET` request with `https://postman-echo.com/digest-auth` on Postman. Select "Digest Auth" and you will have to enter your username & password (`postman/password`) as before but postman takes care of generating a digest for you using those values (& other defaults, if you don't customize them)
+
+### 3. Bearer token
+
+Bearer token means that anyone who holds a token (i.e bears it) can get successfully authenticated. It is part of `RFC 6750` (and is the same kind of token used as access token in Oauth2.0)
+
+It is used but there are some security concerns:
+
+1. Since anyone having the bearer token can be authenticated, it is important for the client and server to guard this token (i.e the onus is on the apps to provide security)
+2. Because of (1), it does not matter what the username/password is and who is using the app as long as he bears a token. It's similar to having a tattoo that proves that you are part of a criminal gang! No name, address, etc required...
+3. Since anyone who gets the token can be authenticated, it is important to ***use HTTPS*** so that even if request is intercepted, no one can get its actual value
+
+Then why is access token similar to a bearer token? With access tokens, a lot more mandatory steps take place before providing the token, the scope is defined, and so on
+
+The `Authorization` header will be of the format: `Bearer <token>`. For example, `Bearer sa.24.sdfMo` (The token can literally be any string)
+
+### 4. OAuth2.0
+
+As understood in its own section, we do not access an API directly in OAuth2.0. Instead, user interaction is necessary and the auth server needs to be accessed by both user and the client app and then after getting the access token can we hit the Resource server.
+
+## AWS
+
+## Webhooks
+
+## Microservices
+
