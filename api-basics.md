@@ -4,18 +4,18 @@
 
 **Contents**
 
-1. [What is an API?](# What is an API?)
-2. [API details](# API details)
-3. [What is a Web service?](# What is a Web service?)
-4. [HTTP](# HTTP)
-5. [Data representation formats](# Data representation formats)
-6. [Protocols for Web services](# Protocols for Web services)
-7. [Types of apps](# Types of apps)
-8. [Security, authentication, & authorization](# Security, authentication, & authorization)
-9. [Types of authentication & Postman Introduction](# Types of authentication & Postman Introduction)
-10. [AWS](# AWS)
-11. [Webhooks](# Webhooks)
-12. [Microservices](# Microservices)
+1. [What is an API?](#What-is-an-API?)
+2. [API details](#API-details)
+3. [What is a Web service?](#What-is-a-Web-service?)
+4. [HTTP](#HTTP)
+5. [Data representation formats](#Data-representation-formats)
+6. [Protocols for Web services](#Protocols-for-Web-services)
+7. [Types of apps](#Types-of-apps)
+8. [Security, authentication, & authorization](#Security,-authentication,-&-authorization)
+9. [Types of authentication & Postman Introduction](#Types-of-authentication-&-Postman-Introduction)
+10. [AWS](#AWS)
+11. [Webhooks](#Webhooks)
+12. [Microservices](#Microservices)
 
 ## What is an API?
 
