@@ -118,7 +118,7 @@ The common response headers are **cookie** (holds all the cookies)m **content-ty
 
 On both sides, we can have custom headers (usually prefixed with an `x-`). For example, your CDN provider might allows some custom headers to pass through and they carry a special meaning to your application
 
-You can have **as many lines (Headers)** as you want in the headers section.
+You can have **as many lines (Headers)** as you want in the headers section. This means that we can have **custom headers** too (such as the `x-` prefixed ones used as per convention)
 
 #### Blank line
 
@@ -314,7 +314,7 @@ REST is more popular and also growing in popularity as compared to SOAP. You may
 
 SOAP stands for **Simple Object Access Notation**. Object access refers to accessing an API. Therefore, SOAP is a notation by which we access an API (i.e rules)
 
-SOAP uses a language called **WSDL** (Web Services Description Language) for its purposes
+SOAP uses a language called **WSDL** (Web Services Description Language) for its purposes (pronounced "wizdel")
 
 #### WSDL structure & example
 
@@ -357,11 +357,12 @@ In this example the `<portType>` element defines "glossaryTerms" as the name of 
 
 #### The HTTP request/response rules in SOAP:
 
-1. Start line: `POST <WSDL> <HTTPVersion>`
+1. **Start line**: `POST <WSDL> <HTTPVersion>`
 	- There are no method names in SOAP so it just uses `POST` as a placeholder for it (even though it does not create content on the API server). Hence, **every SOAP request uses POST**
 	- The WSDL location is used in place of the path & query params
-2. Headers: The `content-type` must be set to **`text/xml`**
-3. Body: Contains XML data (i.e an XML envelope formed using WSDL)
+2. **Headers**: The `content-type` must be set to **`text/xml`**. No constraint on the other headers
+3. **Blank line**
+4. **Body**: Contains XML data (i.e an XML envelope formed using WSDL)
 
 The SOAP rules were defined by the **W3C** (Same organization that created XML, HTML, & WSDL)
 
@@ -416,3 +417,57 @@ Postman-Token: 48c93c51-62e3-42e8-ba66-6e299d5b7b89
 
 ### REST
 
+REST stands for **REpresentational State Transfer**. What it means is that the data communicated back is a ***representation*** *(a copy)* of the data that was queried. For example, the request might have been to fetch user data from a database or a file. The response is a model of the actual data in the format that the API wants to provide it to you
+
+REST was created by **Roy Fielding**
+
+#### SOAP vs REST
+
+1. Methods:
+	- All SOAP request have the POST method name (since method names are not used)
+	- REST relies on method names. Hence, it uses them. For example, to request an HTML page, we will use the GET method since we want to read the HTML data that exists on server. User creation on the other hand, will use a POST method since we are creating a user on the server. There are 4 main methods: GET, POST, PUT, DELETE
+2. `Content-type`:
+	- In SOAP, the request and response must be of an XML format (based on the WSDL)
+	- In REST, the content type can be anything you define it to be.
+3. State:
+	- SOAP is stateful. That is, it depends on the state of the server. If server is down, it cannot call a procedure on the server and if the state changes during a procedure call, the request can be affected by it
+	- REST is **stateless** (just like HTTP). If the server is down, it just waits for it to come back up and serve a resource (as opposed to calling a procedure). So, whenever the server is ready to server state (i.e a resource) it serves it. Therefore, the control is with the server and not the client (i.e we request from a server without telling it how to get the data unlike in SOAP). Therefore, ***time** of the request does not affect the response* (and it does not associate new requests with old and so on, every request is independent)
+4. Rules
+	- SOAP has rules on content type, its creation, the procedures that can be called, and so on
+	- REST does not have have any rules like SOAP does (like using wsdl, following a syntax) and it is flexible. 
+
+Therefore, ***REST is today the modern and most preferred way to do APIs***
+
+#### Methods:
+
+1. GET: Used to **read** (query) data
+2. POST: Used to **create** data
+3. PUT: Used to **update** (change) data
+4. DELETE: Used to **remove** data
+
+Therefore, we can see that POST-GET-PUT-DELETE maps directly to the **CRUD** operations on a database. Hence, these are the most important methods and most commonly used as well
+
+There are other methods too such as TRACE, HEAD, OPTIONS, etc.
+
+**NOTE:**  
+- The **GET** method also helps us **CACHE** resources based on the headers such as `cache-control`/`expiry`. 
+- Since JSON is simpler and better than XML, a lot of the REST APIs request and response data are in JSON
+
+#### Structure of HTTP request using REST
+
+1. **Start line**: `<method> <location&params> <httpversion>`
+	- Example: `GET /search?q=tuna HTTP/1.1`
+2. **Header lines**: Any of the regular headers can be used (No constraint on `content-type` header. It need not be `text/xml`)
+3. **Blank line**
+4. **Body**: Any content type (JSON, images, HTML, XML, etc)
+
+#### Example of an HTTP request with REST protocol
+
+![Image of a REST based HTTP request](https://static1.smartbear.co/soapui/media/images/stories/rest/rest_query_parameter_with_post_in_raw_os_1.png)
+
+#### History of API protocols
+
+- 1980s - Sun RPC (Remote Procedure Calls)
+- 1989 - XML RPC
+- 1999 - SOAP
+- 2000 - REST
