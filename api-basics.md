@@ -471,3 +471,248 @@ There are other methods too such as TRACE, HEAD, OPTIONS, etc.
 - 1989 - XML RPC
 - 1999 - SOAP
 - 2000 - REST
+
+## Types of apps
+
+There are 3 main types of apps:
+
+1. Native apps
+2. Web based
+3. Hybrid apps
+
+The operating system itself provides APIs to interact with the hardware. For example, camera, location, sound, etc are all used via APIs. These are low-level APIs. We can also have high-level APIs that use low-level APIs. These include things like the browser, email client, etc (which can be apps too).
+
+Native apps need to use the OS APIs. Therefore, a native app has to be build for a particular OS. For example, an android app for android os, windows app for windows os, and so on
+
+Web based apps work inside the browser. For example, your websites. So, the apps work inside another API like the browser so it does not have full access to the OS except via the browser. It has HTML5 however, and that provides a lot of capabilities that allow OS API access. We make most of our work done via requests to APIs on servers running on other computers over the internet. Therefore, these web apps are platform independent (OS it is used on does not matter)
+
+Hybrid apps have both native features. Web apps can be embedded inside the native app. We can use middlewares between OS and web app to interact with the system
+
+### Comparison
+
+- Quality, performance, & speed: Native apps are best
+- Cost: Web apps are the easiest to create
+- Accessibility: Web apps are very accessible (apps require download)
+
+## Security, Authentication & Authorization
+
+### HTTPS
+
+When you transfer data over the internet with HTTP, you are transferring plain data that anyone can intercept and see. Hackers can take advantage and exploit vulnerabilities. Therefore, HTTP is not secure
+
+HTTPS was introduced later and it **encrypts** your transmitted data (i.e requests and responses). It is more secure in the sense that if someone intercepts the network and gets the HTTP payload, it is not easy to decrypt and decipher the contents of it
+
+HTTP urls start with `http://` prefix while HTTPS urls start with `https://`
+
+### Authentication vs Authorization
+
+Authentication and authorization do not mean the same thing. 
+
+- **Authentication**: *Proving your identity*. For example, logging in to a site which proves that I am so-and-so
+- **Authorization**: *Limited access*. For example, depending on the authorization level, you can allow someone to see free videos, or premium ones, if you are a video hosting website
+
+Authorization has nothing to do with proving your identity.
+
+#### Examples of authentication and authorization
+
+| Name | Authentication | Authorization | Examples |
+|------|----------------|---------------|----------|
+| No Auth | N | N | Google search page |
+| Basic Auth | Y | N | Gmail |
+| Bearer Token | N | Y | Not many examples |
+| OAuth | Y | Y | Many (ex: Waze, Google OAuth) |
+| Two-factor Auth | Y | N | High security |
+
+- **No Auth**: Does not require any security. Anyone can access everything
+- **Basic Auth**: API needs to know who you are. Ex: Once you login to an email account, you can access all features. There is no auth required
+- **Bearer Token**: Don't need to know who is using the API but we need to provide access based on a token that authorizes the request. This approach is ***not very secure*** and hence, not used much
+- **OAuth**: We give another entity (like an app) access to resources. You need to know who is using the entity (app) and depending on that there is authorization on what resource can be accessed. For example, a Google Maps app user authenticated and allowed to use only the location API on the phone but not the others. ***Very commonly used***
+- **Two-factor Auth**: We authenticate ourselves first normally (using primary credentials like a username and a password) but then we have to also put in a token (a second credential) that we might physically have or accessible elsewhere (like another app or sms) to be able to actually use the app and APIs. Therefore, ***we authenticate twice*** in this approach. There is no authorization needed. It is used for **high security** applications where there is no access restriction once you login but we need to be sure who's using the app (Ex: Bank apps)
+
+Depending on the need, there is authorization or authentication or both!
+
+### OAuth2.0
+
+> Built from multiple tutorials including the main inspiration for this article (Topmost link)
+> - [Original Link to RFC 6749](https://tools.ietf.org/html/rfc6749)
+> - [Okta article](https://developer.okta.com/blog/2019/10/21/illustrated-guide-to-oauth-and-oidc)
+> - [OAuth2 Simplified](https://aaronparecki.com/oauth-2-simplified/#user-experience-and-alternative-authorization-flows)
+
+***OAuth2.0 is a way to give access (authorization) to a 3rd party entity (i.e application) to access your resources on another entity.*** 
+
+As an example, imagine you have a Google Photos account and want share access to a folder in it for a photo editing app (or to another friend). Your photo editing app then needs to send you to google photos which will make you login (if not done so already), take your consent to provide access to the other app, and redirect back to the photo editor app with a special token. This token is then used by the photo editor app to work on photos from the folder you've allowed it to access
+
+**Note**: ***OAuth1.0 is obsolete*** and no one uses it. You do not have to learn it and OAuth2.0 is not built on top of it either
+
+#### Why OAuth2.0?
+
+Sharing your credentials on one app with another app and expecting privacy and security to be guaranteed is a big risk. The need is to provide authorization to resources and not the user credentials
+
+Note that there is authentication as well as authorization in OAuth:
+
+1. Authentication of the user (resource owner) on authorization server
+2. Authorization of the client app on the authorization server
+
+#### Working of OAuth2.0
+
+1. OAuth allows 3rd party access
+2. Limited access (authorization)
+3. It provides access to a ***Web service*** (An API over the internet)
+4. Therefore, OAuth requires that ***HTTP protocol*** be used
+5. Instead of giving away credentials (insecure), OAuth introduces an ***authorization layer***
+
+#### Roles in OAuth2.0
+
+1. ***Resource owner***: You (the user) are the owner of your identity on the accounts 
+2. ***Client***: The 3rd party app that wants to access your other account on your behalf
+3. ***Authorization server***: It is the application that knows the resource owner, can authenticate him/her, and provide access keys
+4. ***Resource server***: It is the application that contains the resources (of the resource owner) that the client is trying to access
+
+The authorization and resource servers can be on the same computer, under the same organization, or they can be separate in both ways. OAuth does not put any ***constraint*** on it
+
+#### Basic OAuth2.0 flow (high level)
+
+1. User (Resource owner) is using a 3rd party app (Client)
+2. User clicks on trigger to start OAuth (say, a button)
+3. User is redirected to Authorization server page where he is asked to login if not already done
+4. User's consent is asked on the Authorization server page for the resources he is willing to share with the Client (He can deny it too!)
+5. On getting consent, the Authorization server redirects back to the Client page and a lot of further API calls between Authorization server, Resource server and Client happen that the user is unaware of (i.e does not require his/her interaction) until finally the resource is received by the client
+
+#### Terminologies
+
+1. **Redirect URI**: Page to redirect to once auth server grants client
+2. **Grant (Response) type**: The type of grant provided
+	- *Authorization code*: Most common type of grant type (popular)
+	- Other types: *Client credentials*, *Implicit*, *Resource owner*
+3. **Scope**: Includes the list of resources that can be granted access to
+4. **Consent**: Whether user wants to allow access to requested resources
+5. **Client ID**: The client must have registered a unique name with authorization server much before any of the OAuth flow can take place
+6. **Client secret**: Along with ID, even a secret key is made available to client to be used during communication with the auth server
+7. **Authorization code**: A short lived, temporary code that, along with client secret, is used to fetch the access token from authorization server
+8. **Access token**: The token used to get the protected resource from the Resource server
+9. **Refresh token**: The access token might expire. So, you can use an optional refresh token to hit the Authorization server to fetch a new access token instead of going through the whole OAuth flow from the beginning (The refresh token has a longer expiry than access token)
+
+#### Detailed OAuth2 workflow using Authorization Code grant type
+
+| Step | Client                                                                                                              | Authorization Server                                                         | Resource Server                                            | User Action                                 |
+|------|---------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|------------------------------------------------------------|---------------------------------------------|
+| 1    | Registers itself with Auth server using Client ID                                                                    | Provides a Client secret to the client                                  |                                                            |                                             |
+| 2    | Redirects to Auth server with \(a\) Client ID \(b\) Redirect URI \(c\) Grant type \(d\) scope                       |                                                                              |                                                            | Clicks on button that enables authorization |
+| 3    |                                                                                                                     | Authenticates user \(Is session active?\)                                    |                                                            | Must login to Auth server if needed         |
+| 4    |                                                                                                                     | Takes consent of user for access to resources in scope                       |                                                            | Must click to allow access \(or deny\)      |
+| 5    |                                                                                                                     | Redirects back to client with grant \(Authorization code\)                   |                                                            |                                             |
+| 6    | Makes an API call \(No redirect\) to Auth server using \(a\) Client ID \(b\) Authorization code \(c\) Client secret |                                                                              |                                                            |                                             |
+| 7    |                                                                                                                     | Responds to Client with \(a\) access token \(b\) Optionally, a refresh token |                                                            |                                             |
+| 8    | Makes an API call to Resource server with access token                                                              |                                                                              |                                                            |                                             |
+| 9    |                                                                                                                     |                                                                              | Responds to Client with data it has requested & can access |                                             |
+| 10   | Makes use of the received data                                                                                      |                                                                              |                                                            |                                             |
+
+
+#### Client registration with Authorization server 
+
+This is a step that happens *way before* the user can interact with an app and provide access to his/her accounts using OAuth. 
+
+The client app, when it recognizes the importance of accessing the resources of its user on another service, must reach out to the service and register itself
+
+1. **From Client to Auth server**
+	1. Client type (If native app, sends "public" since it can't store secrets on OS as a file where anyone can access it, else "confidential" for a web app since the browser will store it securely & not the app)
+	2. Redirect URL
+	3. Client secret (only if client type is "confidential")
+	4. Additional information (optional)
+2. **From Auth server back to Client**
+	1. Client ID
+	2. Client secret (if client type is "confidential")
+
+#### Contents of the authorization request (Client to Auth server)
+
+Refer to **step (2)** in the above table:
+
+1. Client ID 
+2. Redirect URI
+3. Response Type (ex: Authorization code)
+4. Scope
+5. Client secret
+
+#### Contents of the access token request (Client to Auth server)
+
+Refer to **step (6)** in the above table:
+
+1. Grant type (ex: Authorization code)
+2. The grant (ex: Authorization Code)
+3. Client ID
+4. Client secret
+
+#### Contents of the access token response (Auth server to Client)
+
+Refer to **step (7)** in the above table:
+
+1. Access token
+2. Token type
+3. Expires in (seconds) (*Note*: we can have a token that never expires)
+4. Refresh token (optional)
+5. Scope (optional)
+
+### OpenID Connect
+
+**OIDC** is a *thin layer* that sits on top of OAuth2.0. It is a standard that allows us to fetch profile & information of the user on an app and use it in another
+
+As an example, whenever we login using facebook or google on other apps such as other websites, we are doing it via OAuth... but, not just OAuth. Instead, with OAuth + OpenID since it provides us with the user's facebook profile information (not all but some basic ones for the purpose of security)
+
+OpenID is ***not*** part of the OAuth2.0 standard (`RCF 6749`). It is defined by a different organisation called the *OpenID Foundation*
+
+#### OAuth vs OpenID
+
+OAuth grants accesses to resources belonging to the user on a server but OpenID provides user information like profile, DOB, email, last login, likes/dislikes, phone number, and so on
+
+#### OpenID advantages
+
+It has become a popular way of realizing **Single Sign On (SSO)** mechanism where the user chooses one platform to login to and use that info to login to other applications. This makes it less tedious to the user by removing multiple username/password login steps and he also need not maintain so many usernames and passwords. No new login on 3rd party app required. Basically, *leverage a login a user already has and is comfortable using* 
+
+A drawback can be that it exposes some of your data on one app to other 3rd party apps. It is usually used by the client app for *marketing* purposes and can be a slight security concern
+
+#### How OpenID works
+
+The flow is the regular to OAuth2.0 flow with a few differences:
+
+1. In addition to getting an access token from Auth server, the Client also gets an **ID token** (Step **(7)** in table above)
+2. In addition to sending an access token to Resource server, the Client also sends an **ID token** (Step **(8)** in table above)
+
+An openID endpoint (URL) makes it possible for the Client to access user details using the ID token. 
+
+The ID token is in the form of a **JSON Web Tokens (JWT)** which is a string encryption (Base64 format) and has 3 parts (`.` separated):
+
+1. Header
+2. Resource owner information
+3. Signature
+
+When decoded, it contains a JSON (hence, the name) format data (key, value pairs). The keys refer to one property of the RO (user)
+
+Example JWT: 
+
+```
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+```
+
+Example decoded JWT parts: 
+
+```
+HEADER:
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+
+RO (USER) INFORMATION:
+{
+  "sub": "1234567890",
+  "name": "John Doe",
+  "iat": 1516239022
+}
+
+SIGNATURE (GENERATION LOGIC):
+HMACSHA256(
+  base64UrlEncode(header) + "." +
+  base64UrlEncode(payload),
+  <your 256 bit secret>
+)
+```
