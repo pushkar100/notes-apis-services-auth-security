@@ -112,7 +112,7 @@ The payload look something like this:
   "http://toptal.com/jwt_claims/is_admin": true,
   "company": "Toptal",
   "user": "pushkar@toptal.com",
-  "isAdmin" false
+  "isAdmin": false
 }
 ```
 
