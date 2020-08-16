@@ -13,9 +13,9 @@
 7. [Types of apps](#types-of-apps)
 8. [Security, authentication, & authorization](#security-authentication--authorization)
 9. [Types of authentication & Postman Introduction](#types-of-authentication--postman-introduction)
-10. [AWS](#aws)
-11. [Webhooks](#webhooks)
-12. [Microservices](#microservices)
+10. [Webhooks](#webhooks)
+11. [Microservices](#microservices)
+12. [Cloud computing](#cloud-computing)
 
 ## What is an API?
 
@@ -127,7 +127,7 @@ Example: `HTTP/1.1 200 OK`
 
 Each line in the headers section is one individual header (key & value)
 
-The common request headers are **host** (domain) such as `www.google.com` and **token** (if request requires authentication) and so on
+The common request headers are **hostname** (domain) such as `www.google.com` and **token** (if request requires authentication) and so on. 
 
 The common response headers are **cookie** (holds all the cookies)m **content-type** (is it an HTML page or a JSON, etc?)
 
@@ -178,6 +178,8 @@ The `application/json` & `application/xml` are two common data formats for shari
 	- `3xx`: Redirections
 	- `4xx`: Client errors
 	- `5xx`: Server errors
+- It is important to note that although the path (location) & query parameters appear in the start line, the hostname is defined as a header
+- The `cookie` header holds cookies in the request. The `set-cookie` header holds cookies in the response
 
 #### Standard headers (Non-exhaustive)
 
@@ -808,9 +810,60 @@ The `Authorization` header will be of the format: `Bearer <token>`. For example,
 
 As understood in its own section, we do not access an API directly in OAuth2.0. Instead, user interaction is necessary and the auth server needs to be accessed by both user and the client app and then after getting the access token can we hit the Resource server.
 
-## AWS
-
 ## Webhooks
 
+Web hooks are also known as ***Reverse APIs*** or ***Reverse Web services***
+
+Web refers to a web service and hooks refer to *events*. Whenever an event occurs at the API end (ex: Server) such as a login, a price drop, a delayed flight, payment, etc, the API notifies the Client. That is why the term *reverse* is used
+
+The sequence of events are as follows:
+
+1. Event triggers
+2. Configuration on the server holds Client endpoint (ex: A saved IP address of a cell phone which had used the API before)
+3. Server makes an HTTP request to this endpoint
+4. Client receives request (ex: An SMS notifying cell phone user about event) and can respond back to Server with its own HTTP response
+
 ## Microservices
+
+`Micro = small` and `services = Web services = Web APIs`
+
+Microservices means small APIs. But, this is a *mistake!* Our APIs need not be small, they can be large. What people mean by microservices then is embedded in the concept of ***monolith architecture***. Microservices are an alternative to that
+
+### Monolith vs microservices
+
+Monolith basically offers
+1. Endpoints, and
+2. A program that takes care of everything that the endpoints are used for (From database querying to HTML pages and other things)
+
+Microservices offer
+1. Endpoints, and
+2. Multiple other APIs that are hit depending on what the request the endpoint is handling. We can have one microservice for databases, one for frontend, etc
+
+### Advantages of microservices
+
+1. Scalability (Reusable and maintainable components)
+2. Code language independence (different services can choose different tech stacks)
+3. Smaller and specialized teams (We can look to hire based on need and look out for experts rather than master of all)
+
+### When should we choose a microservice architecture?
+
+Answer: It depends. We need to analyse both our needs and the pros & cons and then decide. We are engineers so nothing should be mechanical. We must think logically and come to a conclusion i.e select an approach
+
+Microservices can have certain drawbacks though:
+
+- Need to train people to work on multiple things if it involves multiple services (An overhead in terms of time and company effort and hence, it is a cost) 
+- Cannot think of the entire application as a whole. Rather, we might narrow down the focus down to our team and problems to solve within our domains, instead of thinking of solving general problems that cut across services.
+
+## Cloud computing
+
+Cloud computing is basically having a computer running in a remote place other than managing it yourself (i.e within your organisation)
+
+Instead of paying a lot to manage everything, we pay a period bill according to what we need. Many other organisations might have their own servers running on the same computer as ours. Or, we can have multiple instances on one computer for robustness, etc.
+
+### How does it work?
+
+The computers have a hardware plus a minimal OS layer called the **Hypervisor**. On top of this sit the multiple instances of an operating system and its software (based on need) such as linux with nginx, php, mysql. In this way, we can have multiple OSes known as **virtual machines** running and provide us with different stacks
+
+Amazon Web Services (AWS), Microsoft Azure, and Google Cloud are some of the popular cloud computing platforms/services
+
 
