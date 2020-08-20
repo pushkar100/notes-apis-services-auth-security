@@ -63,4 +63,9 @@ Example of a payload. Each property is a claim. It is not mandatory to send or u
 	- ***Refresh token best practices***
 		- It is a special token that can be exchanged for an access token once it expires (Since RT has a longer expiry than access token). Therefore, we can *extend a client session*
 		- *Never* keep the refresh token in the browser! (No persistent storage must be used for this). An attacker with access to the RT (from the web browser) can gain access and keep generating new tokens
+		- Refresh tokens DO NOT improve security. Refresh tokens gives you an option WHEN THINGS GO WRONG. If someone steals your tokens, you can invalidate the refresh token because it is stored in your database somewhere. 
+		- It is much easier to delete that token from the database than having the system admin change the token secret for the app (thus invalidating ALL users). The access token will invalidate automatically when it expires
+		- This is why your refresh token should be deleted from your database when you log out.
+		- Even with a compromised token, once the user logs out, the only way someone can access your account is by logging back in (providing proper credentials)
+		- Refresh tokens DO NOT replace the need for session management on the server. It just makes it cheaper to run your app because you can validate the session every 15 minutes (access token expiry) vs every single call to the server.
 
