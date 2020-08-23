@@ -565,7 +565,7 @@ As an example, imagine you have a Google Photos account and want share access to
 
 #### Why OAuth2.0?
 
-OAuth stands for ***Open Authentication***. It allows sharing of your credentials on one app with another app and expecting privacy and security to be guaranteed is a big risk. The need is to provide authorization to resources and not the user credentials
+OAuth stands for ***Open Authorisation***. It allows sharing of your credentials on one app with another app and expecting privacy and security to be guaranteed is a big risk. The need is to provide authorization to resources and not the user credentials
 
 Note that there is authentication as well as authorization in OAuth:
 
