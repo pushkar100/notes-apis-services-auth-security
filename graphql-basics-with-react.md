@@ -2,6 +2,41 @@
 
 [Udemy: Complete GraphQL with React by Stephen Grider](https://www.udemy.com/course/graphql-with-react-course)
 
+## Contents
+
+- [GraphQL](#graphql)
+  * [GraphQL vs RESTful APIs](#graphql-vs-restful-apis)
+  * [GraphQL introduction](#graphql-introduction)
+    + [Express & GraphQL setup](#express---graphql-setup)
+    + [Schema](#schema)
+      - [Creating a type](#creating-a-type)
+      - [Root query](#root-query)
+      - [Exporting a schema](#exporting-a-schema)
+    + [GraphQL playground](#graphql-playground)
+      - [GraphQL as an interface](#graphql-as-an-interface)
+  * [Fetching data with queries](#fetching-data-with-queries)
+    + [Nested queries](#nested-queries)
+    + [More root queries](#more-root-queries)
+    + [Bi-directional patterns & circular dependencies](#bi-directional-patterns---circular-dependencies)
+    + [More about queries](#more-about-queries)
+  * [Mutations](#mutations)
+  * [GraphQL ecosystem](#graphql-ecosystem)
+    + [Server:](#server-)
+    + [Clients](#clients)
+  * [Apollo client](#apollo-client)
+    + [Strategy to use while writing GraphQL with Apollo](#strategy-to-use-while-writing-graphql-with-apollo)
+    + [Utilizing the props](#utilizing-the-props)
+    + [General architecture](#general-architecture)
+  * [Dynamic data in queries and mutations](#dynamic-data-in-queries-and-mutations)
+  * [Mutations from the client](#mutations-from-the-client)
+    + [Cold cache vs warm cache](#cold-cache-vs-warm-cache)
+  * [Re-fetching queries](#re-fetching-queries)
+  * [Connecting multiple queries and mutation to a component](#connecting-multiple-queries-and-mutation-to-a-component)
+  * [Executing dynamic queries from a component](#executing-dynamic-queries-from-a-component)
+  * [Modularizing queries](#modularizing-queries)
+  * [Identifying records in Apollo client](#identifying-records-in-apollo-client)
+  * [Error handling on the client side](#error-handling-on-the-client-side)
+
 ## GraphQL vs RESTful APIs
 
 RESTful APIs are built using HTTP methods that have conventions on how to fetch or manipulate data. A simple RESTful API with the general conventions might look like this:
