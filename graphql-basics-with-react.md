@@ -895,3 +895,17 @@ This helps because when we make changes to our data, we don't have to always fet
 *Such an auto-update saves us the trouble of making another N/W request to fetch up-to-date information.*
 
 Internally, Apollo makes use of a DB concept called normalization. Read more about it [here](https://www.apollographql.com/blog/apollo-client/caching/demystifying-cache-normalization/).
+
+## Error handling on the client side
+
+**Mutation errors**:
+- When you perform a mutation and there is an error in the graphQL server, we get back a rejected promise from the `mutate` method.
+- We can add a `catch()` class in javascript to handle this error.
+- Read the error object from the response in `catch` callback with `response.graphQLErrors`: 
+	- It is an array of error objects. Each object has a `message` property describing the error.
+- Use the error objects to determine what action needs to be taken by the frontend app on a graphQL server failure (or client error during data fetching)
+
+**Query errors**:
+- Errors while connecting a query to a component are available in the `this.props.data.errors` field. 
+- It is also an array of error objects just like with errors in mutation
+- Use it to gracefully handle errors.
