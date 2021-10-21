@@ -876,3 +876,22 @@ export default gql`
 `;
 ```
 
+## Identifying records in Apollo client
+
+We can identify objects in Apollo client by providing an object with a `dataIdFromObject` function in the setup:
+
+```javascript
+const client = new ApolloClient({
+  dataIdFromObject: o => o.id
+});
+```
+
+The above code tells Apollo to set the `id` attribute of any object (`o`) it queries as the data ID.
+
+**How does this help?**
+
+This helps because when we make changes to our data, we don't have to always fetch related data. For example, if a lyric has been added to the list of lyrics of a song then the song will auto-update its lyrics' list if it knows the data id of the lyric.
+
+*Such an auto-update saves us the trouble of making another N/W request to fetch up-to-date information.*
+
+Internally, Apollo makes use of a DB concept called normalization. Read more about it [here](https://www.apollographql.com/blog/apollo-client/caching/demystifying-cache-normalization/).
